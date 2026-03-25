@@ -1,0 +1,239 @@
+<div class="min-h-[calc(100vh-64px)] w-full bg-white flex justify-center py-6">
+  <div class="max-w-3xl w-full px-6">
+    <!-- Header -->
+    <div class="mb-10">
+      <h1 class="text-2xl font-bold text-slate-900 mb-1">Settings</h1>
+      <p class="text-[15px] text-slate-500">Manage your personal settings.</p>
+    </div>
+
+    <!-- Personal Information Section -->
+    <div class="mb-10">
+      <h2 class="font-bold text-slate-900 mb-4">Personal Information</h2>
+      <div
+        class="bg-blue-50 rounded-[20px] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-slate-100 p-8"
+      >
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+          <div class="flex flex-col md:flex-row gap-8 items-start">
+            <!-- Avatar Status -->
+            <div class="flex flex-col items-center shrink-0">
+              <div class="relative w-24 h-24 mb-3">
+                <img
+                  src="https://cdn-icons-png.freepik.com/512/6596/6596121.png"
+                  alt="Profile avatar"
+                  class="w-full h-full rounded-full object-cover border-4 border-white shadow-sm"
+                />
+                <button
+                  type="button"
+                  class="absolute bottom-0 right-0 bg-[#2563eb] text-white p-1.5 rounded-full border-2 border-white shadow hover:bg-blue-700 transition"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M1 8a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 018.07 3h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0016.07 6H17a2 2 0 012 2v7a2 2 0 01-2 2H3a2 2 0 01-2-2V8zm13.5 3a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM10 14a3 3 0 100-6 3 3 0 000 6z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span class="text-[11px] text-slate-400 font-medium">96x96 PNG or JPG</span>
+            </div>
+
+            <!-- Forms -->
+            <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2"
+                  >FULL NAME</label
+                >
+                <input
+                  type="text"
+                  formControlName="username"
+                  class="w-full px-4 py-2.5 bg-[#f8fafc] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:bg-white text-[15px] text-slate-800 transition-colors"
+                />
+                @if (profileForm.get('username')?.invalid && profileForm.get('username')?.touched) {
+                  <span class="text-xs text-red-500 mt-1 block"
+                    >Username must be between 3 and 50 characters.</span
+                  >
+                }
+              </div>
+              <div>
+                <label
+                  class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2"
+                  >EMAIL ADDRESS</label
+                >
+                <input
+                  type="email"
+                  formControlName="email"
+                  appEmailExists
+                  class="w-full px-4 py-2.5 bg-[#f8fafc] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:bg-white text-[15px] text-slate-800 transition-colors"
+                />
+                @if (
+                  profileForm.get('email')?.errors?.['required'] &&
+                  profileForm.get('email')?.touched
+                ) {
+                  <span class="text-xs text-red-500 mt-1 block"
+                    >Please enter a valid email address.</span
+                  >
+                }
+                @if (
+                  profileForm.get('email')?.errors?.['emailExists'] &&
+                  profileForm.get('email')?.touched
+                ) {
+                  <span class="text-xs text-red-500 mt-1 block"
+                    >This email address is not available.</span
+                  >
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 flex items-center justify-between">
+            <button
+              type="submit"
+              [disabled]="isUpdatingProfile"
+              class="bg-blue-700 hover:bg-blue-900 text-white px-6 py-2.5 rounded-xl text-[15px] font-medium transition-colors shadow-sm disabled:opacity-50"
+            >
+              {{ isUpdatingProfile ? 'Updating...' : 'Update Profile' }}
+            </button>
+            <div class="flex gap-4 items-center">
+              @if (profileMessage) {
+                <span class="text-sm font-medium text-green-600">{{ profileMessage }}</span>
+              }
+              @if (profileError) {
+                <span class="text-sm font-medium text-red-600">{{ profileError }}</span>
+              }
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Security Section -->
+    <div class="mb-10">
+      <h2 class="font-bold text-slate-900 mb-4">Security</h2>
+      <div
+        class="bg-blue-50 rounded-[20px] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-slate-100 p-8"
+      >
+        <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()">
+          <div class="space-y-5 max-w-md">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase mb-2"
+                >CURRENT PASSWORD</label
+              >
+              <input
+                type="password"
+                placeholder="........"
+                formControlName="oldPassword"
+                class="w-full px-4 py-2.5 bg-[#f8fafc] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:bg-white text-[15px] text-slate-800 tracking-[0.2em] transition-colors"
+              />
+              @if (
+                passwordForm.get('oldPassword')?.invalid && passwordForm.get('oldPassword')?.touched
+              ) {
+                <span class="text-xs text-red-500 mt-1 tracking-normal block">Required.</span>
+              }
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase mb-2"
+                >NEW PASSWORD</label
+              >
+              <input
+                type="password"
+                placeholder="........"
+                formControlName="newPassword"
+                class="w-full px-4 py-2.5 bg-[#f8fafc] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:bg-white text-[15px] text-slate-800 tracking-[0.2em] transition-colors"
+              />
+              @if (
+                passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched
+              ) {
+                <span class="text-xs text-red-500 mt-1 tracking-normal block"
+                  >Must be at least 6 characters.</span
+                >
+              }
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase mb-2"
+                >CONFIRM NEW PASSWORD</label
+              >
+              <input
+                type="password"
+                placeholder="........"
+                formControlName="confirmNewPassword"
+                class="w-full px-4 py-2.5 bg-[#f8fafc] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:bg-white text-[15px] text-slate-800 tracking-[0.2em] transition-colors"
+              />
+              @if (
+                passwordForm.errors?.['mismatch'] && passwordForm.get('confirmNewPassword')?.touched
+              ) {
+                <span class="text-xs text-red-500 mt-1 tracking-normal block"
+                  >Passwords do not match.</span
+                >
+              }
+            </div>
+          </div>
+
+          <div class="mt-8 flex items-center justify-between">
+            <button
+              type="submit"
+              [disabled]="isUpdatingPassword"
+              class="bg-blue-700 hover:bg-blue-900 text-white px-6 py-2.5 rounded-xl text-[15px] font-medium transition-colors shadow-sm disabled:opacity-50"
+            >
+              {{ isUpdatingPassword ? 'Updating...' : 'Update Password' }}
+            </button>
+            <div class="flex gap-4 items-center">
+              @if (passwordMessage) {
+                <span class="text-sm font-medium text-green-600">{{ passwordMessage }}</span>
+              }
+              @if (passwordError) {
+                <span class="text-sm font-medium text-red-600">{{ passwordError }}</span>
+              }
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Notification Preferences Section -->
+    <div class="mb-10">
+      <h2 class="font-bold text-slate-900 mb-4">Notification Preferences</h2>
+      <div
+        class="bg-blue-50 rounded-[20px] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-slate-100 overflow-hidden"
+      >
+        <!-- Toggle 1 -->
+        <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between">
+          <div>
+            <h3 class="text-[16px] font-semibold text-slate-900 mb-0.5">Active Alerts</h3>
+            <p class="text-[14px] text-slate-500">Get notified when a new alert comes in</p>
+          </div>
+          <button
+            type="button"
+            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-blue-700 transition-colors duration-200 ease-in-out focus:outline-none"
+          >
+            <span
+              class="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+            ></span>
+          </button>
+        </div>
+
+        <!-- Toggle 2 -->
+        <div class="px-8 py-5 flex items-center justify-between">
+          <div>
+            <h3 class="text-[16px] font-semibold text-slate-900 mb-0.5">Simulation</h3>
+            <p class="text-[14px] text-slate-500">Get notified when an active simulation is done</p>
+          </div>
+          <button
+            type="button"
+            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-blue-700 transition-colors duration-200 ease-in-out focus:outline-none"
+          >
+            <span
+              class="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
