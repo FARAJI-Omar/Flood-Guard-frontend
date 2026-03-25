@@ -1,0 +1,65 @@
+ <!-- Emergency Alerts -->
+<div class="bg-[#e9effa] rounded-2xl p-5 flex flex-col h-full">
+  <div class="flex items-center gap-2 mb-4">
+    <div
+      class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-sm"
+    >
+      !
+    </div>
+    <h3 class="text-lg font-bold text-[#1f3167]">Emergency Alerts</h3>
+  </div>
+
+  @if (alerts.length > 0) {
+    <!-- Scrollable Alerts Container -->
+    <div class="flex flex-col gap-3 overflow-y-auto pr-2 max-h-60">
+      @for (alert of alerts; track alert.id) {
+        <!-- Alert Card -->
+        <div class="bg-white rounded-lg p-5 shadow-sm border-l-4 flex-shrink-0"
+             [class.border-red-600]="alert.severity === 'danger' || alert.severity === 'DANGER'"
+             [class.border-orange-500]="alert.severity === 'warning' || alert.severity === 'WARNING'">
+          <h4 class="font-bold text-[#1f3167] text-base mb-1">{{ alert.cityName }}</h4>
+          <div class="flex items-center gap-1 text-gray-500 text-xs mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {{ alert.timestamp | date:'HH:mm' }} GMT+1
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 border-t border-gray-100 pt-3">
+            <div>
+              <div class="text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-wider">
+                Measured
+              </div>
+              <div class="text-xl font-bold"
+                   [class.text-red-600]="alert.severity === 'danger' || alert.severity === 'DANGER'"
+                   [class.text-orange-600]="alert.severity === 'warning' || alert.severity === 'WARNING'">
+                {{ alert.precipitation }}mm
+              </div>
+            </div>
+            <div>
+              <div class="text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-wider">
+                Threshold
+              </div>
+              <div class="text-xl font-bold text-[#1f3167]">{{ alert.threshold }}mm</div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="bg-white rounded-lg p-5 shadow-sm text-center text-gray-500">
+      No active alerts
+    </div>
+  }
+</div>
