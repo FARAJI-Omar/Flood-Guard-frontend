@@ -1,0 +1,144 @@
+<div class="min-h-[calc(100vh-80px)] w-full flex flex-col lg:flex-row relative bg-white">
+  <!-- Mobile Parameters Dropdown Toggle -->
+  <div class="lg:hidden w-full bg-white z-20 border-b border-gray-200">
+    <button
+      (click)="toggleMobileParams()"
+      class="w-full p-4 flex items-center justify-between font-bold text-gray-800"
+    >
+      <div class="flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+          <path d="M12 12v9"></path>
+          <path d="m8 17 4 4 4-4"></path>
+        </svg>
+        SIMULATION PARAMETERS
+      </div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="transition-transform duration-200"
+        [ngClass]="{ 'rotate-180': isParamsOpenMobile }"
+      >
+        <path d="m6 9 6 6 6-6"></path>
+      </svg>
+    </button>
+    <!-- Dropdown Content -->
+    @if (isParamsOpenMobile) {
+      <div
+        class="absolute left-0 right-0 bg-white shadow-xl z-50 p-4 border-b border-gray-200 max-h-[60vh] overflow-y-auto"
+      >
+        <app-simulation-params
+          [params]="params()"
+          [isRunning]="isRunning()"
+          (toggleDraw)="toggleDrawMode()"
+          (clearDraw)="clearPolygonDraw()"
+          (triggerSimulate)="onTriggerSimulate()"
+          (updateParam)="updateParam($event.key, $event.value)"
+          (clearAll)="clearParams()"
+        >
+        </app-simulation-params>
+      </div>
+    }
+  </div>
+
+  <!-- Left Sidebar (Desktop Params) -->
+  <div
+    class="hidden lg:block w-80 xl:w-96 flex-shrink-0 border-r border-gray-100 p-6 z-10 bg-white"
+  >
+    <app-simulation-params
+      [params]="params()"
+      [isRunning]="isRunning()"
+      (toggleDraw)="toggleDrawMode()"
+      (clearDraw)="clearPolygonDraw()"
+      (triggerSimulate)="onTriggerSimulate()"
+      (updateParam)="updateParam($event.key, $event.value)"
+      (clearAll)="clearParams()"
+    >
+    </app-simulation-params>
+  </div>
+
+  <!-- Middle Map Area -->
+  <div class="flex-1 relative min-h-[400px] lg:min-h-0 bg-gray-100">
+    <app-map
+      [interactiveMode]="true"
+      [isDrawingMode]="isDrawingMode"
+      [clearDrawTrigger]="clearDrawTrigger"
+      (shapeDrawn)="onPolygonDrawn($event)"
+      containerClass="w-full h-full"
+    ></app-map>
+
+    <!-- Blur/Progress Overlay over MAP AND RESULTS -->
+    @if (isRunning()) {
+      <div
+        class="absolute inset-0 z-[1000] backdrop-blur-md bg-white/40 flex flex-col items-center justify-center pointer-events-auto transition-all duration-300"
+      >
+        <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full mx-4 text-center">
+          <div class="relative w-20 h-20 mx-auto mb-6">
+            <!-- Spinner -->
+            <svg class="animate-spin w-full h-full text-blue-100" viewBox="0 0 24 24">
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+                fill="none"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">{{ progress() }}%</span>
+            </div>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-2">Simulating Scenario</h3>
+          <p class="text-sm text-gray-500">
+            Calculating saturation and runoff risk based on topographical terrain and weather
+            configuration.
+          </p>
+
+          <!-- Progress bar -->
+          <div class="w-full bg-gray-100 rounded-full h-2 mt-6 overflow-hidden">
+            <div
+              class="bg-blue-600 h-2 rounded-full transition-all duration-200"
+              [style.width.%]="progress()"
+            ></div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Right Sidebar (Results) - Desktop -> Right side, Mobile -> Bottom -->
+  <div
+    class="w-full lg:w-80 xl:w-96 flex-shrink-0 p-6 z-10 bg-white lg:border-l border-t lg:border-t-0 border-gray-100 relative"
+  >
+    <app-simulation-results [results]="results()"></app-simulation-results>
+
+    <!-- We overlay just the right side as well if we want the blur to cover it too -->
+    @if (isRunning()) {
+      <div class="absolute inset-0 z-50 backdrop-blur-md bg-white/40"></div>
+    }
+  </div>
+</div>
