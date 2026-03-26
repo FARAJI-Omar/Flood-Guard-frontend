@@ -1,0 +1,51 @@
+<div
+  class="relative w-full h-full rounded-2xl overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.9)] bg-gray-900 z-0"
+>
+  <!-- The Leaflet Map Container -->
+  <div #mapContainer class="w-full h-full z-10"></div>
+
+  <!-- Overlay UI / Control Panel -->
+  <div
+    class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2 p-2 bg-[#0f172a]/80 backdrop-blur-md rounded-full border border-gray-700/50 shadow-2xl"
+  >
+    <button
+      (click)="activeLayer.set('temp')"
+      [class.bg-blue-600]="activeLayer() === 'temp'"
+      [class.text-white]="activeLayer() === 'temp'"
+      [class.hover:bg-gray-800]="activeLayer() !== 'temp'"
+      class="px-5 py-2 rounded-full text-sm font-semibold tracking-wide text-gray-300 transition-all"
+    >
+      Temperature
+    </button>
+
+    <button
+      (click)="activeLayer.set('precip')"
+      [class.bg-indigo-500]="activeLayer() === 'precip'"
+      [class.text-white]="activeLayer() === 'precip'"
+      [class.hover:bg-gray-800]="activeLayer() !== 'precip'"
+      class="px-5 py-2 rounded-full text-sm font-semibold tracking-wide text-gray-300 transition-all"
+    >
+      Precipitation
+    </button>
+
+    <button
+      (click)="activeLayer.set('wind')"
+      [class.bg-teal-500]="activeLayer() === 'wind'"
+      [class.text-white]="activeLayer() === 'wind'"
+      [class.hover:bg-gray-800]="activeLayer() !== 'wind'"
+      class="px-5 py-2 rounded-full text-sm font-semibold tracking-wide text-gray-300 transition-all"
+    >
+      Wind Speed
+    </button>
+
+    <button
+      (click)="activeLayer.set('humidity')"
+      [class.bg-cyan-600]="activeLayer() === 'humidity'"
+      [class.text-white]="activeLayer() === 'humidity'"
+      [class.hover:bg-gray-800]="activeLayer() !== 'humidity'"
+      class="px-5 py-2 rounded-full text-sm font-semibold tracking-wide text-gray-300 transition-all"
+    >
+      Humidity
+    </button>
+  </div>
+</div>
