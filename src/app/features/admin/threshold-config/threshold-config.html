@@ -1,0 +1,71 @@
+<div class="space-y-8">
+  <!-- Header -->
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900">Alerts Management</h1>
+    <p class="text-gray-600 mt-1">
+      Configure global triggers and monitor real-time hydrological warnings.
+    </p>
+  </div>
+
+  <!-- Threshold Settings Card -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+    <div class="flex items-start gap-8">
+      <!-- Left Section -->
+      <div class="w-3/5 border-l-4 border-blue-950 pl-6">
+        <div class="flex items-center gap-3 mb-4">
+          <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"
+            />
+          </svg>
+          <h2 class="text-xl font-semibold text-gray-900">Alert Threshold Settings</h2>
+        </div>
+
+        <p class="text-sm text-gray-600 mb-6">
+          Set the global precipitation threshold (mm) to trigger system wide alerts. This value
+          determines when the Sentinel engine broadcasts urgent notifications to regional
+          authorities.
+        </p>
+
+        <div class="flex items-end gap-4">
+          <div class="flex-1">
+            <label class="block text-xs font-medium text-gray-500 uppercase mb-2"
+              >Threshold (MM)</label
+            >
+            <input
+              type="number"
+              [(ngModel)]="newThreshold"
+              min="0"
+              step="0.1"
+              [disabled]="loading"
+              class="w-full px-4 py-3 text-2xl font-bold text-gray-900 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+            />
+          </div>
+          <button
+            (click)="updateThreshold()"
+            [disabled]="loading || newThreshold <= 0"
+            class="px-8 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Update<br />Threshold
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Section - Stats -->
+      <div class="w-2/5 space-y-4">
+        <div class="bg-gray-50 rounded-lg p-6">
+          <div class="text-xs font-medium text-gray-500 uppercase mb-2">Current Trigger</div>
+          <div class="text-4xl font-bold text-gray-900">
+            {{ threshold }}<span class="text-lg">.0</span
+            ><span class="text-sm font-normal">mm</span>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 rounded-lg p-6">
+          <div class="text-xs font-medium text-gray-500 uppercase mb-2">Active Alerts</div>
+          <div class="text-4xl font-bold text-orange-500">{{ activeAlertsCount }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

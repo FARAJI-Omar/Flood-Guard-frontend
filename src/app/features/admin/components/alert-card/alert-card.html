@@ -1,0 +1,28 @@
+<div class="alert-card" [class.warning]="alert.severity === 'warning'" [class.danger]="alert.severity === 'danger'">
+  <div class="alert-header">
+    <h4>{{ alert.cityName }}</h4>
+    <span class="severity-badge" [class.warning]="alert.severity === 'warning'" [class.danger]="alert.severity === 'danger'">
+      {{ alert.severity }}
+    </span>
+  </div>
+  <div class="alert-body">
+    <div class="alert-info">
+      <span class="label">Precipitation:</span>
+      <span class="value">{{ alert.precipitation }} mm</span>
+    </div>
+    <div class="alert-info">
+      <span class="label">Threshold:</span>
+      <span class="value">{{ alert.threshold }} mm</span>
+    </div>
+    <div class="alert-info">
+      <span class="label">Time:</span>
+      <span class="value">{{ alert.timestamp | date:'short' }}</span>
+    </div>
+    <div class="alert-info">
+      <span class="label">Status:</span>
+      <span class="value status" [class.active]="alert.status === 'active'" [class.read]="alert.status === 'read'">
+        {{ alert.status }}
+      </span>
+    </div>
+  </div>
+</div>
