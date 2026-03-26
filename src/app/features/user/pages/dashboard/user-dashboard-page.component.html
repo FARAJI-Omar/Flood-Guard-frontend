@@ -1,0 +1,235 @@
+<div class="py-6">
+  <!-- Status Badge -->
+  <div
+    class="inline-flex items-center gap-2 px-3 py-1 bg-[#eef2ff] text-[#1f3167] rounded-full text-xs font-bold tracking-widest mb-6"
+  >
+    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+    LIVE FEED ACTIVE
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Simulations -->
+    <app-stat-card
+      label="MY SIMULATIONS"
+      value="{{ (mySimulationsCount$ | async) || 0 }}"
+      leftBorderColor="bg-[#1f3167]"
+      iconColor="text-gray-400"
+      valueColor="text-[#1f3167]"
+    >
+      <svg
+        icon
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-6 h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3 13h8M3 18h18M13 8h8M13 13h8M3 8h8"
+        />
+      </svg>
+    </app-stat-card>
+
+    <!-- Alerts -->
+    <app-stat-card
+      label="ACTIVE ALERTS"
+      [value]="(activeAlertsCount$ | async) || 0"
+      leftBorderColor="bg-orange-500"
+      iconColor="text-orange-500"
+      valueColor="text-orange-500"
+    >
+      <svg
+        icon
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-6 h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+        />
+      </svg>
+    </app-stat-card>
+
+    <!-- Risks -->
+    <app-stat-card
+      label="FLOOD EVENTS THIS YEAR"
+      value="{{ (eventsThisYear$ | async) || 0 }}"
+      leftBorderColor="bg-red-700"
+      iconColor="text-red-700"
+      valueColor="text-red-700"
+    >
+      <svg
+        icon
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+        />
+      </svg>
+    </app-stat-card>
+
+    <!-- Runoff -->
+    <!-- <app-stat-card
+      label="LAST RUNOFF"
+      value="12.4 mm"
+      leftBorderColor="bg-blue-400"
+      iconColor="text-gray-400"
+      valueColor="text-[#1f3167]"
+    >
+      <svg
+        icon
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-6 h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
+        />
+      </svg>
+    </app-stat-card> -->
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="mt-8 gap-6 grid grid-cols-1 lg:grid-cols-3 h-150">
+    <!-- Map Section -->
+    <div class="lg:col-span-2 bg-[#f4f7fc] rounded-2xl flex flex-col overflow-hidden relative">
+      <!-- Map Header -->
+      <div class="flex justify-between items-center px-6 py-4 bg-white border-b border-gray-100">
+        <div class="flex items-center gap-2 text-[#1f3167] font-semibold">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+            />
+          </svg>
+          Morocco live weather
+        </div>
+        <button
+          class="flex items-center gap-1.5 px-3 py-1.5 bg-[#eef2ff] text-[#1f3167] hover:bg-blue-100 transition-colors rounded-md text-sm font-semibold"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          Layers
+        </button>
+      </div>
+      <!-- Map Container -->
+      <div class="grow w-full relative z-0 p-4">
+        <app-weather-map></app-weather-map>
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="lg:col-span-1 flex flex-col gap-6 h-full">
+      <!-- Emergency Alerts -->
+      <app-alert></app-alert>
+
+        <!-- Quick Actions -->
+      <div class="bg-[#f4f7fc] rounded-2xl p-6 flex flex-col grow">
+        <h3 class="text-sm font-bold text-[#1f3167] uppercase tracking-wider mb-5">
+          Quick Actions
+        </h3>
+
+        <div class="flex flex-col gap-3">
+          <button
+          routerLink="/user/simulationlab"
+            class="w-full flex items-center cursor-pointer justify-between bg-[#e0eafe] hover:bg-[#112a57] hover:text-white text-[#1f3167] px-5 py-4 rounded-xl font-semibold transition-colors"
+          >
+            New Simulation
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </button>
+
+          <a
+          routerLink="/user/history"
+            class="w-full flex items-center justify-between bg-[#e0eafe] hover:bg-[#112a57] hover:text-white text-[#1f3167] px-5 py-4 rounded-xl font-semibold transition-colors"
+          >
+            View Flood History
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </a>
+<!-- 
+          <button
+            class="w-full flex items-center justify-between bg-[#e0eafe] hover:bg-[#112a57] hover:text-white text-[#1f3167] px-5 py-4 rounded-xl font-semibold transition-colors"
+          >
+            Download Last Report
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
+            </svg>
+          </button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
