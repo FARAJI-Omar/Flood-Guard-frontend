@@ -1,0 +1,9 @@
+services:
+  flood-guard-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flood-guard-client
+    ports:
+      - "4200:80"
+    restart: unless-stopped
