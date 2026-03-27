@@ -1,15 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import * as SimulationActions from './simulations.actions';
 import { SimulationService } from '../../services/simulation.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class SimulationEffects {
   private actions$ = inject(Actions);
   private simulationService = inject(SimulationService);
+  private toastrService = inject(ToastrService);
 
   loadHistory$ = createEffect(() =>
     this.actions$.pipe(
@@ -77,4 +79,19 @@ export class SimulationEffects {
       default: return error.message || 'An unknown error occurred.';
     }
   }
+
+  showSuccessOptions$ = createEffect(() =>
+        this.actions$.pipe(
+          ofType(
+            SimulationActions.createSimulationSuccess),
+          tap((action) => {
+            if (action.type === SimulationActions.createSimulationSuccess.type) {       
+                setTimeout(() => {
+                this.toastrService.success('Simulation created successfully!', 'Success');
+                }, 10000);
+            }
+          })
+        ),
+        { dispatch: false }
+    );
 }

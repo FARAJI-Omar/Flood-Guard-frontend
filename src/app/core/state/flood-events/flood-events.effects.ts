@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, tap, withLatestFrom } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { FloodEventService } from '../../services/flood-event.service';
 import * as FloodEventsActions from './flood-events.actions';
 import { Store } from '@ngrx/store';
@@ -11,6 +12,7 @@ export class FloodEventsEffects {
   private actions$ = inject(Actions);
   private floodEventService = inject(FloodEventService);
   private store = inject(Store);
+  private toastr = inject(ToastrService);
 
   loadEvents$ = createEffect(() =>
     this.actions$.pipe(
@@ -65,5 +67,25 @@ export class FloodEventsEffects {
         )
       )
     )
+  );
+
+  showSuccessOptions$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        FloodEventsActions.createEventSuccess,
+        FloodEventsActions.updateEventSuccess,
+        FloodEventsActions.deleteEventSuccess
+      ),
+      tap((action) => {
+        if (action.type === FloodEventsActions.createEventSuccess.type) {       
+          this.toastr.success('Flood event added successfully!', 'Success');    
+        } else if (action.type === FloodEventsActions.updateEventSuccess.type) {
+          this.toastr.success('Flood event updated successfully!', 'Success');  
+        } else if (action.type === FloodEventsActions.deleteEventSuccess.type) {
+          this.toastr.success('Flood event deleted successfully!', 'Success');  
+        }
+      })
+    ),
+    { dispatch: false }
   );
 }
