@@ -5,6 +5,8 @@ import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { inject } from '@angular/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideToastr } from 'ngx-toastr';
 
 import { routes } from './app.routes';
 import { floodEventsReducer } from './core/state/flood-events/flood-events.reducer';
@@ -21,6 +23,11 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(withInterceptors([authInterceptor])),
+    provideAnimationsAsync(),
+    provideToastr({
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
     provideRouter(routes),
     provideStore({ 
       floodEvents: floodEventsReducer,

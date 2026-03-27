@@ -2,11 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of, interval, timer } from 'rxjs';
-import { map, catchError, switchMap, withLatestFrom, mergeMap } from 'rxjs/operators';
+import { map, catchError, switchMap, withLatestFrom, mergeMap, tap } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { WeatherService } from '../../services/weather.service';
 import * as AlertsActions from './alerts.actions';
 import * as AlertsSelectors from './alerts.selectors';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class AlertsEffects {
@@ -14,6 +15,8 @@ export class AlertsEffects {
   private alertService = inject(AlertService);
   private weatherService = inject(WeatherService);
   private store = inject(Store);
+  private toastr = inject(ToastrService);
+  
 
   loadThreshold$ = createEffect(() =>
     this.actions$.pipe(
@@ -107,5 +110,18 @@ export class AlertsEffects {
     timer(0, 3600000).pipe(
       map(() => AlertsActions.checkWeather())
     )
+  );
+
+  showSuccessOptions$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(
+          AlertsActions.updateThreshold),
+        tap((action) => {
+          if (action.type === AlertsActions.updateThreshold.type) {       
+            this.toastr.success('Threshold updated successfully!', 'Success');    
+          }
+        })
+      ),
+      { dispatch: false }
   );
 }

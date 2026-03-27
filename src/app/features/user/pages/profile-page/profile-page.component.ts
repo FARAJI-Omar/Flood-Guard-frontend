@@ -5,6 +5,7 @@ import { UserService } from '../../../../core/services/user.service';
 import { TokenStorageService } from '../../../../core/services/token-storage.service';
 import { AuthSessionService } from '../../../../core/services/auth-session.service';
 import { EmailExistsDirective } from '../../../../core/directives/email-exists.directive';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile-page',
@@ -17,6 +18,8 @@ export class ProfilePageComponent implements OnInit {
   private userService = inject(UserService);
   private tokenStorage = inject(TokenStorageService);
   private authSession = inject(AuthSessionService);
+  private toastrService = inject(ToastrService);
+  
 
   profileForm: FormGroup;
   passwordForm: FormGroup;
@@ -89,6 +92,7 @@ export class ProfilePageComponent implements OnInit {
         this.isUpdatingProfile = false;
         this.profileMessage = 'Profile updated successfully.';
         this.authSession.updateUserInfo(data.username, data.email);
+        this.toastrService.success('Profile updated successfully!', 'Success');
       },
       error: (err) => {
         this.isUpdatingProfile = false;
@@ -114,6 +118,7 @@ export class ProfilePageComponent implements OnInit {
         this.isUpdatingPassword = false;
         this.passwordMessage = 'Password updated successfully.';
         this.passwordForm.reset();
+        this.toastrService.success('Password updated successfully!', 'Success');
       },
       error: (err) => {
         this.isUpdatingPassword = false;
